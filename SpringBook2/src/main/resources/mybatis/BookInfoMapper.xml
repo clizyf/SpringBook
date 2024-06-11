@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbook2.Mapper.BookInfoMapper">
+    <insert id="insertBook">
+        insert into book_info (book_name,author,count,price,publish,`status`) values (#{bookName},#{author},#{count},#{price},#{publish},#{status});
+    </insert>
+
+    <select id="count" resultType="integer">
+        select count(1) from book_info where status!=0
+    </select>
+
+    <update id="updateBook">
+        update book_info
+        <set>
+            <if test="book_name!=null">
+                 book_name=#{bookName},
+            </if>
+
+            <if test="author!=null">
+                 author=#{author},
+            </if>
+
+            <if test="count!=null">
+                `count` =#{count},
+            </if>
+            <if test="price!=null">
+                price=#{price},
+            </if>
+            <if test="publish!=null">
+                publish=#{publish},
+            </if>
+            <if test="status!=null">
+                status=#{status}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteBook">
+        DELETE FROM book_info where id=#{bookId};
+    </delete>
+
+    <delete id="batchDeleteBook">
+        update book_info set status=0
+        where id in 
+        <foreach collection="ids" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

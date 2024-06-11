@@ -1,0 +1,15 @@
+com\example\springbook2\Controller\UserController.class
+com\example\springbook2\Controller\BookController.class
+com\example\springbook2\Service\BookService.class
+com\example\springbook2\constant\Constants.class
+com\example\springbook2\Made\BookInfo.class
+com\example\springbook2\Service\UserService.class
+com\example\springbook2\Made\PageRequest.class
+com\example\springbook2\Made\UserInfo.class
+com\example\springbook2\Made\Result.class
+com\example\springbook2\Made\PageResult.class
+com\example\springbook2\SpringBook2Application.class
+com\example\springbook2\Enums\ResultStatus.class
+com\example\springbook2\Enums\BookStatus.class
+com\example\springbook2\Mapper\BookInfoMapper.class
+com\example\springbook2\Mapper\UserInfoMapper.class

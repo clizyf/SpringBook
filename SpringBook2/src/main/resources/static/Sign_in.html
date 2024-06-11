@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册页面</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: #007bff;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #send-captcha {
+      margin-top: 10px;
+      background-color: #28a745;
+    }
+
+    #send-captcha:hover {
+      background-color: #218838;
+    }
+
+    #message {
+      margin-top: 20px;
+      text-align: center;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <h2>注册</h2>
+    <form id="registrationForm">
+      <div class="input-group">
+        <label for="username">用户名</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="input-group">
+        <label for="email">邮箱</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="input-group">
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="input-group">
+        <label for="confirm-password">确认密码</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+      </div>
+      <div class="input-group">
+        <label for="captcha">验证码</label>
+        <input type="text" id="captcha" name="captcha" required>
+      </div>
+      <button type="submit">注册</button>
+    </form>
+    <button id="send-captcha">发送验证码</button>
+    <div id="message"></div>
+  </div>
+</div>
+<script>
+  document.getElementById('registrationForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const captcha = document.getElementById('captcha').value;
+
+    // 简单的前端验证
+    if (password !== confirmPassword) {
+      document.getElementById('message').textContent = '密码和确认密码不一致';
+      return;
+    }
+
+    // 发送Ajax请求
+    fetch('/user/sign_in', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        email: email,
+        password: password,
+        captcha: captcha
+      })
+    })
+            .then(response => response.json())
+            .then(result => {
+              if (result.code === "SUCCESS" && result.data === "") {
+                location.href = "login.html";
+              } else {
+                alert('验证码不正确');
+              }
+            })
+            .catch(error => {
+              document.getElementById('message').textContent = '请求失败，请稍后再试';
+              document.getElementById('message').style.color = 'red';
+            });
+  });
+
+  document.getElementById('send-captcha').addEventListener('click', function() {
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+
+    // 发送Ajax请求
+    fetch('/user/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        email: email
+      })
+    })
+            .then(response => response.json())
+            .then(result => {
+              if (result.code === "SUCCESS") {
+                alert('验证码已发送');
+              } else {
+                alert('验证码发送失败');
+              }
+            })
+            .catch(error => {
+              document.getElementById('message').textContent = '请求失败，请稍后再试';
+              document.getElementById('message').style.color = 'red';
+            });
+  });
+</script>
+</body>
+</html>

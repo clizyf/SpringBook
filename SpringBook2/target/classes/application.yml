@@ -1,0 +1,16 @@
+spring:
+  application:
+  name: SpringBook2
+# ???????
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3308/book_test?characterEncoding=utf8&useSSL=false
+    username: root
+    password: 105528clzyf.
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true #????????
+  mapper-locations: classpath:mybatis/*Mapper.xml
+logging:
+  file:
+    name: spring-book.log
